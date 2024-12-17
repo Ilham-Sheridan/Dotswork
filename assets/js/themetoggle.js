@@ -8,11 +8,9 @@ if (currentTheme) {
     if (currentTheme === 'light') {
         toggleSwitch.checked = true;
         $(".tticon").text("dark_mode")
-        //$(".videobanner").attr("src", "assets/video/pottogravity.webm")
         console.log('applied "'+ currentTheme +'"')
     } else {
         $(".tticon").text("light_mode")
-        //$(".videobanner").attr("src", "assets/video/pottogravitydark.webm")
         console.log('applied "'+ currentTheme +'"')
     }
 }
@@ -21,7 +19,6 @@ function switchTheme(e) {
     if (e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        //$(".videobanner").attr("src", "assets/video/pottogravity.webm")
         $(".splash").addClass("splashanim")
         setTimeout((function () {
             $(".splash").removeClass("splashanim")
@@ -31,7 +28,6 @@ function switchTheme(e) {
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
-        //$(".videobanner").attr("src", "assets/video/pottogravitydark.webm")
         $(".splash").addClass("splashanim")
         setTimeout((function () {
             $(".splash").removeClass("splashanim")
