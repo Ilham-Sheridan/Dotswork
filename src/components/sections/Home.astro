@@ -3,6 +3,16 @@ import Gridbox from "../../layouts/Gridbox.astro";
 import CardObject from "../../components/Card-object.astro";
 import B2GalleryIndex from "../b2Gallery_index.astro";
 import MediaCard from "../MediaCard.astro";
+
+const { BASE_URL } = import.meta.env;
+
+// Helper function for path normalization inside this file
+function getImagePath(path: string): string {
+    // Remove leading slash if present
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    //return `${BASE_URL}${cleanPath}`;
+    return `${BASE_URL}/${cleanPath}`; //for githubPages
+}
 ---
 
 <div class="centering">
@@ -13,7 +23,7 @@ import MediaCard from "../MediaCard.astro";
   <Gridbox id="about">
     <CardObject
       image={{
-        src: "/content/illus/just.jpg",
+        src: getImagePath("/content/illus/just.jpg"),
         alt: "Mary on top of a rooftop",
         positionX: "60%",
       }}
@@ -62,7 +72,7 @@ import MediaCard from "../MediaCard.astro";
 
     <CardObject
       image={{
-        src: "/content/dotswork.png",
+        src: getImagePath("/content/dotswork.png"),
         alt: "Dotswork Logo",
         position: "left",
       }}
@@ -77,7 +87,7 @@ import MediaCard from "../MediaCard.astro";
     />
     <CardObject
       image={{
-        src: "/content/illus/grow.jpg",
+        src: getImagePath("/content/illus/grow.jpg"),
         alt: "Mareota with cocoa",
         position: "right",
       }}
@@ -103,21 +113,21 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="big"
       video={{
-        src: "/content/3d/neonixEasy.webm",
+        src: getImagePath("/content/3d/neonixEasy.webm"),
         alt: "An advert-like presentation of a custom nixie tube clock design.",
         volume: 0.5,
       }}
     />
     <MediaCard
       video={{
-        src: "/content/3d/curt.webm",
+        src: getImagePath("/content/3d/curt.webm"),
         alt: "Fabric curtain simulation demo in an indoor setting.",
         volume: 0.5,
       }}
     />
     <MediaCard
       image={{
-        src: "/content/3d/qublast.jpg",
+        src: getImagePath("/content/3d/qublast.jpg"),
         alt: "'QUBLAST' Inspired by the hacking tool alike 'FLipper Zero' combined with a mini oscilloscope multimeter/multitool.",
         position: "center",
       }}
@@ -125,35 +135,35 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="mediumWide"
       image={{
-        src: "/content/3d/muzen.jpg",
+        src: getImagePath("/content/3d/muzen.jpg"),
         alt: "A love letter to Muzen's 'Wild Jeep' Bluetooth speaker design bonus with a pile of my nixie tube models next to it.",
         position: "center",
       }}
     />
     <MediaCard
       video={{
-        src: "/content/3d/rob.webm",
+        src: getImagePath("/content/3d/rob.webm"),
         alt: "Modelling challenge of a spherical robot.",
       }}
     />
     <MediaCard
       size="mediumWide"
       video={{
-        src: "/content/3d/coolfab.webm",
+        src: getImagePath("/content/3d/coolfab.webm"),
         alt: "Very detailed towel-like fabric along with its cloth physics.",
       }}
     />
     <MediaCard
       size="extraTall"
       image={{
-        src: "/content/3d/nnSpindle.jpg",
+        src: getImagePath("/content/3d/nnSpindle.jpg"),
         alt: "'QUBLAST' Inspired by the hacking tool alike 'FLipper Zero' combined with a mini oscilloscope multimeter/multitool.",
       }}
     />
     <MediaCard
       size="big"
       video={{
-        src: "/content/3d/nnDebug.webm",
+        src: getImagePath("/content/3d/nnDebug.webm"),
         alt: "An advert-like presentation of a custom nixie tube clock design.",
         volume: 0.5,
       }}
@@ -161,14 +171,14 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="tall"
       video={{
-        src: "/content/3d/neonix.webm",
+        src: getImagePath("/content/3d/neonix.webm"),
         alt: "'Neo-Classic' Design numerical nixie tube with functional controller.",
       }}
     />
     <MediaCard
       size="superWide"
       video={{
-        src: "/content/3d/XMB.webm",
+        src: getImagePath("/content/3d/XMB.webm"),
         alt: "A 3D recreation of the classic PlayStation XMB menu.",
       }}
     />
@@ -206,7 +216,7 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="tall"
       video={{
-        src: "/content/modesig/moonlight.webm",
+        src: getImagePath("/content/modesig/moonlight.webm"),
         alt: `Unconventional dynamic music visualizer out of the song 'Moonlight' by 7dB, syncing the song by a literal bpm clock on the bottom left I added. and add several unique quirks on some synth instruments or song progression.`,
         volume: 0.15,
       }}
@@ -214,21 +224,21 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="big"
       video={{
-        src: "/content/modesig/envelope.webm",
+        src: getImagePath("/content/modesig/envelope.webm"),
         alt: `Typography animation of a fictional company name "Envelope"`,
         volume: 0.5,
       }}
     />
     <MediaCard
       video={{
-        src: "/content/modesig/hoovesies.webm",
+        src: getImagePath("/content/modesig/hoovesies.webm"),
         alt: `"Hoovesies" by VyletPony, Unconventional music visualizer using a visual break down of the music composition`,
         volume: 0.5,
       }}
     />
     <MediaCard
       video={{
-        src: "/content/modesig/c.webm",
+        src: getImagePath("/content/modesig/c.webm"),
         alt: `Motion design improvisation out of a letter 'C'.`,
         volume: 0.5,
       }}
@@ -236,7 +246,7 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="mediumWide"
       video={{
-        src: "/content/modesig/imightbeabeliever.webm",
+        src: getImagePath("/content/modesig/imightbeabeliever.webm"),
         alt: `"I Might Be a Believer" by Paper Idol, Typography music video using mixed media of both 2D and 3D elements`,
         volume: 0.5,
       }}
@@ -244,21 +254,21 @@ import MediaCard from "../MediaCard.astro";
     <MediaCard
       size="big"
       video={{
-        src: "/content/modesig/debug_demo.webm",
+        src: getImagePath("/content/modesig/debug_demo.webm"),
         alt: `A believably animated debug/diagnostic screen of the NeoNix nixie tube clock project`,
         volume: 0.5,
       }}
     />
     <MediaCard
       video={{
-        src: "/content/modesig/retroux.webm",
+        src: getImagePath("/content/modesig/retroux.webm"),
         alt: `It looks horrid in quality (And small!), but not by accident. It is infact to emulate the old school screen capture of a Nintendo DS back in the days of YouTube. The 'UX' itself in the background isn't from any real game. It simply is a mockup of a UX/UI for an NDS game I completely made up.`,
         volume: 0.5,
       }}
     />
     <MediaCard
       video={{
-        src: "/content/modesig/jh.webm",
+        src: getImagePath("/content/modesig/jh.webm"),
         alt: `One day I woke up and decided to make one of my good friends an animated logo out of nowhere.`,
         volume: 0.5,
       }}

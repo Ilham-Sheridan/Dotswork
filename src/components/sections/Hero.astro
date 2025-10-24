@@ -1,10 +1,19 @@
 ---
+const { BASE_URL } = import.meta.env;
+
+// Helper function for path normalization inside this file
+function getImagePath(path: string): string {
+    // Remove leading slash if present
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    //return `${BASE_URL}${cleanPath}`;
+    return `${BASE_URL}/${cleanPath}`; //for githubPages
+}
 const heroImages = [
-  { url: "/content/3d/muzen.jpg", pos: "center" },
-  { url: "/content/3d/qublast.jpg", pos: "center" },
-  { url: "/content/3d/veh.jpg", pos: "center" },
-  { url: "/content/3d/rob.jpg", pos: "center" },
-  { url: "/content/3d/wacom.jpg", pos: "center" },
+  { url: getImagePath(`/content/3d/muzen.jpg`), pos: "center" },
+  { url: getImagePath(`/content/3d/qublast.jpg`), pos: "center" },
+  { url: getImagePath(`/content/3d/veh.jpg`), pos: "center" },
+  { url: getImagePath(`/content/3d/rob.jpg`), pos: "center" },
+  { url: getImagePath(`/content/3d/wacom.jpg`), pos: "center" },
 ];
 // MAX 5
 ---
