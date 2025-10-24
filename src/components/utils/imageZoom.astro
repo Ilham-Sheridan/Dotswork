@@ -1,0 +1,601 @@
+<div id="zoom-overlay">
+  <div class="infoBoundRect"></div>
+  <div class="zoomLevel">100%</div>
+  <div class="bubbles">
+    <div class="topRow">
+      <div class="title">?</div>
+      <div class="cornerButtons">
+        <div id="getFile" title="Download" class="material-symbols-rounded">
+          download
+        </div>
+        <div id="getUrl" title="Get URL" class="material-symbols-rounded">
+          link
+        </div>
+      </div>
+    </div>
+    <div class="instructions dismiss">
+      <div class="groupInst imageControl">
+        <div class="instRow"><span class="bind">SCROLL</span> Zoom</div>
+        <div class="instRow"><span class="bind">MOUSE</span> Pan</div>
+        <div class="instRow">
+          <span class="bind">MOUSE L</span>
+          <span class="bind">ESC</span> Close
+        </div>
+      </div>
+      <div class="groupInst videoControl">
+        <div class="instRow"><span class="bind">CLICK</span> Play/Pause</div>
+        <div class="instRow"><span class="bind">MOUSE_WHEEL</span> Seek</div>
+        <div class="instRow"><span class="bind">ESC</span> Close</div>
+      </div>
+    </div>
+  </div>
+  <img id="imgSlot" src="" draggable="false" />
+  <video id="vidSlot" controls src="" draggable="false"></video>
+</div>
+
+<script>
+  import { devConsole } from "./devConsole";
+  import { pushToast } from "./miniToastLogic";
+
+  let isOnIndex: boolean;
+
+  function initZoom() {
+    const overlay = document.getElementById("zoom-overlay") as HTMLElement;
+    const zoomLevel = document.querySelector(".zoomLevel") as HTMLElement;
+    const infoRect = document.querySelector(".infoBoundRect") as HTMLElement;
+    const imageSlot = document.getElementById("imgSlot") as HTMLImageElement;
+    const videoSlot = document.getElementById("vidSlot") as HTMLVideoElement;
+    const instructions = document.querySelector(".instructions") as HTMLElement;
+    const imgTitle = document.querySelector(".title") as HTMLElement;
+    const bubbles = document.querySelector(".bubbles") as HTMLElement;
+    const imageControls = document.querySelector(
+      ".groupInst.imageControl"
+    ) as HTMLElement;
+    const videoControls = document.querySelector(
+      ".groupInst.videoControl"
+    ) as HTMLElement;
+    const getUrlButton = document.getElementById("getUrl") as HTMLElement;
+    const getFileButton = document.getElementById("getFile") as HTMLElement;
+
+    let scale = 1;
+    let originalImageRect: DOMRect | null = null;
+    let isVideo: boolean = false;
+    let isMobile: boolean = false;
+
+    if (isOnIndex === (true || null || undefined)) {
+      getUrlButton.style.display = "none";
+      getFileButton.style.display = "none";
+    }
+
+    // Use event delegation for dynamically added images
+    document.body.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("interactive")) {
+        const media = target as HTMLImageElement;
+
+        isMobile = window.innerWidth <= 768;
+
+        isVideo = media.tagName === "VIDEO";
+        if (media.tagName === "VIDEO") {
+          // Handle video zoom
+          imageSlot.style.display = "none";
+          imageSlot.classList.remove("active");
+          videoSlot.style.display = "block";
+          videoSlot.src = media.src;
+          videoSlot.setAttribute("autoplay", "true");
+          videoSlot.setAttribute("loop", "true");
+          videoSlot.volume = media.dataset.vol
+            ? parseFloat(media.dataset.vol)
+            : 0.8;
+          videoSlot.dataset.alt = media.dataset.title || "";
+          imgTitle.textContent = media.dataset.title || "?";
+          openOverlay();
+          setTimeout(() => {
+            videoSlot.classList.add("active");
+          }, 100);
+          overlay.style.cursor = "auto";
+          scale = 1;
+
+          videoSlot.onloadedmetadata = () => {
+            videoSlot.style.transform = "none";
+            requestAnimationFrame(() => {
+              originalImageRect = videoSlot.getBoundingClientRect();
+              devConsole(originalImageRect);
+              updateTransform(window.innerWidth / 2, window.innerHeight / 2);
+            });
+          };
+        } else {
+          // Handle image zoom
+          videoSlot.style.display = "none";
+          videoSlot.classList.remove("active");
+          imageSlot.style.display = "block";
+          imageSlot.src = media.src;
+          imageSlot.dataset.alt = media.dataset.title || "";
+          imageSlot.dataset.losslessURL = media.dataset.lossless || "";
+          imgTitle.textContent = media.dataset.title || "?";
+          devConsole(
+            `Image zooming: ${imageSlot.src} (${imageSlot.dataset.alt})
+            Lossless URL: ${imageSlot.dataset.losslessURL}`
+          );
+          openOverlay();
+
+          setTimeout(() => {
+            imageSlot.classList.add("active");
+          }, 100);
+          scale = 1;
+
+          imageSlot.onload = () => {
+            imageSlot.style.transform = "none";
+            requestAnimationFrame(() => {
+              originalImageRect = imageSlot.getBoundingClientRect();
+              devConsole(originalImageRect);
+              updateTransform(window.innerWidth / 2, window.innerHeight / 2);
+            });
+          };
+        }
+
+        instructions.style.display = "flex";
+        setTimeout(() => {
+          if (isMobile) return;
+          instructions.classList.remove("dismiss");
+          if (!(media.tagName === "VIDEO")) {
+            videoControls.style.display = "none";
+            imageControls.style.display = "flex";
+          } else {
+            videoControls.style.display = "flex";
+            imageControls.style.display = "none";
+          }
+        }, 1);
+      }
+    });
+
+    infoRect.addEventListener("mouseenter", () => {
+      //devConsole("bubbles Hiding instructions");
+      instructions.classList.add("dismiss");
+      imgTitle.classList.add("dismiss");
+    });
+    infoRect.addEventListener("mouseleave", () => {
+      if (scale <= 1) {
+        //devConsole("bubbles Showing instructions");
+        instructions.classList.remove("dismiss");
+      }
+      imgTitle.classList.remove("dismiss");
+    });
+
+    //scrollwheel video seeker
+    overlay.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      if (!isVideo) return; //no seek image
+
+      const seekTime = 0.1; // seconds
+      if (e.deltaY < 0) {
+        videoSlot.currentTime = Math.min(
+          videoSlot.duration,
+          videoSlot.currentTime + seekTime
+        );
+      } else {
+        videoSlot.currentTime = Math.max(0, videoSlot.currentTime - seekTime);
+      }
+    });
+
+    // Zoom with wheel
+    overlay.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      if (isVideo || isMobile) return; //no zoom video/mobile
+
+      const zoomIntensity = 0.1;
+      scale += e.deltaY < 0 ? zoomIntensity : -zoomIntensity;
+
+      //scale clamp
+      scale = Math.max(0.5, Math.min(scale, 10));
+
+      updateTransform(e.clientX, e.clientY);
+      zoomLevelDisplay();
+
+      // Show/hide instructions based on zoom level
+      if (scale > 1) {
+        //devConsole("Hiding instructions");
+        instructions.classList.add("dismiss");
+      } else {
+        //devConsole("Showing instructions");
+        instructions.classList.remove("dismiss");
+      }
+    });
+
+    // Pan with mouse movement
+    overlay.addEventListener("mousemove", (e) => {
+      if (isVideo) return; //no zoom video
+      updateTransform(e.clientX, e.clientY);
+    });
+
+    // Close overlay
+    overlay.addEventListener("click", (e) => {
+      closeHook(e);
+    });
+
+    function closeHook(e: MouseEvent) {
+      if (scale <= 1) {
+        closeOverlay();
+      } else {
+        scale = 1;
+        instructions.classList.remove("dismiss");
+        updateTransform(e.clientX, e.clientY);
+        zoomLevelDisplay();
+      }
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeOverlay();
+      }
+    });
+
+    function openOverlay() {
+      overlay.style.display = "flex";
+      setTimeout(() => overlay.classList.add("active"), 1);
+      // Push a new state so back button can close overlay
+
+      // if (!isMobile) return //MOBILE ONLY
+      // history.pushState({ zoomOverlay: true }, "");
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove("active");
+      devConsole("closeOverlay() Hiding instructions");
+      instructions.classList.add("dismiss");
+      // Stop and reset video if visible
+      if (videoSlot.style.display !== "none") {
+        videoSlot.pause();
+        videoSlot.currentTime = 0;
+        videoSlot.removeAttribute("src"); // Optionally clear src for memory
+        videoSlot.load();
+      }
+      setTimeout(() => {
+        overlay.style.display = "none";
+        instructions.style.display = "none";
+
+        // devConsole(history.state.zoomOverlay)
+
+        // if (isMobile && history.state && history.state.zoomOverlay) {
+        //   history.back();
+        // }
+      }, 200);
+    }
+
+    let timer: number | undefined;
+
+    function zoomLevelDisplay() {
+      clearTimeout(timer);
+      zoomLevel.classList.add("show");
+      zoomLevel.textContent = `${Math.round(scale * 100)}%`;
+
+      //TIL window implies explicit browser
+      timer = window.setTimeout(() => {
+        zoomLevel.classList.remove("show");
+      }, 2000);
+    }
+
+    let currentTransform = { x: 0, y: 0, scale: 1 };
+    let targetTransform = { x: 0, y: 0, scale: 1 };
+    let animating = false;
+
+    function updateTransform(mouseX: number, mouseY: number) {
+      if (!originalImageRect) return;
+
+      // Calculate mouse position relative to the center of the viewport
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      // Get offset from center as a ratio (-1 to 1)
+      const offsetX = (mouseX - centerX) / centerX;
+      const offsetY = (mouseY - centerY) / centerY;
+
+      let translateX = 0;
+      let translateY = 0;
+
+      // Only apply movement when zoomed in
+      if (scale > 1) {
+        // Calculate how much the image extends beyond the viewport when scaled
+        const scaledWidth = originalImageRect.width * scale;
+        const scaledHeight = originalImageRect.height * scale;
+
+        const overpan = 0.2;
+        const maxTranslateX =
+          Math.max(0, (scaledWidth - window.innerWidth) / 2) +
+          scaledWidth * overpan;
+        const maxTranslateY =
+          Math.max(0, (scaledHeight - window.innerHeight) / 2) +
+          scaledHeight * overpan;
+
+        // Apply movement proportional to the available space
+        // Invert the movement so moving mouse right moves image left (magnifying glass effect)
+        translateX = -offsetX * maxTranslateX;
+        translateY = -offsetY * maxTranslateY;
+      }
+      // Set target transform
+      targetTransform = { x: translateX, y: translateY, scale };
+
+      if (!animating) animateTransform();
+
+      function animateTransform() {
+        animating = true;
+        const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+        const smoothing = 0.2; // Lower = smoother/slower
+
+        currentTransform.x = lerp(
+          currentTransform.x,
+          targetTransform.x,
+          smoothing
+        );
+        currentTransform.y = lerp(
+          currentTransform.y,
+          targetTransform.y,
+          smoothing
+        );
+        currentTransform.scale = lerp(
+          currentTransform.scale,
+          targetTransform.scale,
+          smoothing
+        );
+
+        imageSlot.style.transform = `translate(${currentTransform.x}px, ${currentTransform.y}px) scale(${currentTransform.scale})`;
+
+        // If close enough to target, stop animating
+        if (
+          Math.abs(currentTransform.x - targetTransform.x) > 0.5 ||
+          Math.abs(currentTransform.y - targetTransform.y) > 0.5 ||
+          Math.abs(currentTransform.scale - targetTransform.scale) > 0.01
+        ) {
+          requestAnimationFrame(animateTransform);
+        } else {
+          // Snap to target at the end
+          currentTransform = { ...targetTransform };
+          imageSlot.style.transform = `translate(${currentTransform.x}px, ${currentTransform.y}px) scale(${currentTransform.scale})`;
+          animating = false;
+        }
+      }
+
+      //imageSlot.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      // devConsole(
+      // `Transform: translate(${translateX}px, ${translateY}px) scale(${scale})`
+      // );
+    }
+
+    getUrlButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (isVideo) {
+        return; // No URL for video
+      } else {
+        const imgSrc = imageSlot.dataset.losslessURL || imageSlot.src;
+        navigator.clipboard.writeText(imgSrc).then(() => {
+          pushToast("Copied!", 2000);
+        });
+      }
+    });
+
+    getFileButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (isVideo) {
+        return // nah
+      } else {
+        const imgSrc = imageSlot.dataset.losslessURL || imageSlot.src;
+        const link = document.createElement("a");
+        link.target = "_blank";
+        link.href = imgSrc;
+        link.download = imgSrc.split("/").pop() || "image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+  }
+
+  function initSetup() {
+    const currentPath = window.location.pathname;
+    if (!currentPath.includes("gallery")) {
+      isOnIndex = true;
+    } else {
+      isOnIndex = false;
+    }
+    initZoom();
+  }
+
+  document.addEventListener("DOMContentLoaded", initSetup);
+  document.addEventListener("astro:after-swap", initSetup);
+</script>
+
+<style lang="scss">
+  #zoom-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(var(--baseRGB), 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s var(--sleek);
+    pointer-events: none;
+    backdrop-filter: var(--acrylicBackdropStrong);
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  #imgSlot,
+  #vidSlot {
+    max-width: 99%;
+    max-height: 99%;
+    user-select: none;
+    opacity: 1;
+    &.active {
+      opacity: 1;
+      animation: pop 0.5s var(--sleek);
+    }
+  }
+
+  #imgSlot {
+    pointer-events: none;
+  }
+
+  @keyframes pop {
+    from {
+      transform: scale(0.9);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .topRow {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1em;
+  }
+
+  .cornerButtons {
+    display: flex;
+    gap: 1em;
+  }
+  .bubbles {
+    position: fixed;
+    width: 100%;
+    top: 20px;
+    padding: 0em 1.2em;
+    font-size: 1rem;
+    font-family: var(--content);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2em;
+    & .zoomLevel,
+    .instructions,
+    .title,
+    #getUrl, #getFile {
+      color: var(--fore);
+      background: rgba(var(--baseRGB), 0.8);
+      box-shadow:
+        0 1px 4px 0 rgba(0, 0, 0, 0.14),
+        inset 0 0 4.6px 0 rgba(var(--foreRGB), 0.2);
+      backdrop-filter: var(--acrylicBackdrop);
+      padding: 10px;
+      border-radius: 20px;
+      padding: 1em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
+
+    &.instRow {
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .bind {
+      font-weight: bold;
+      font-family: var(--contentSecondary);
+      color: var(--accent);
+      text-transform: uppercase;
+      padding: 0.2em 0.5em;
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+    }
+
+    & .title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--fore);
+      min-width: 210px;
+      transition:
+        transform 0.4s var(--sleek),
+        opacity 0.2s var(--sleek);
+      &.dismiss {
+        transition-timing-function: var(--accel);
+        transform: translateX(-200%);
+        opacity: 0;
+      }
+    }
+
+    & .instructions {
+      max-width: 250px;
+      width: 210px;
+      transition:
+        transform 0.3s var(--sleek),
+        opacity 0.2s var(--sleek);
+      & .groupInst {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2em;
+      }
+      &.dismiss {
+        transition-timing-function: var(--accel);
+        transform: translateX(-200%);
+        opacity: 0;
+      }
+    }
+
+    #getUrl, #getFile {
+      display: grid;
+      place-items: center;
+      height: 62px;
+      width: 62px;
+      padding: 0.5em;
+      background: rgba(var(--baseRGB), 0.5);
+      //border: 1px solid var(--fore);
+      color: var(--fore);
+      transition: all 0.2s var(--sleek);
+      text-decoration: none;
+      font-variation-settings: "wght" 500;
+      box-shadow:
+        0 1px 4px 0 rgba(0, 0, 0, 0.14),
+        inset 0 0 4px 0 rgba(var(--foreRGB), 0.2);
+      &:hover {
+        cursor: pointer;
+        background: rgba(var(--baseRGB), 0.7);
+        transform: scale(1.1);
+        font-variation-settings: "wght" 800;
+      }
+      &:active {
+        transform: scale(0.9);
+        background: rgba(var(--baseRGB), 0.9);
+        font-variation-settings: "wght" 600;
+      }
+    }
+  }
+  .zoomLevel {
+    position: absolute;
+    top: 20px;
+    display: grid;
+    place-items: center;
+    padding: 0.5em;
+    background: rgba(var(--baseRGB), 0.5);
+    box-shadow:
+      0 1px 4px 0 rgba(0, 0, 0, 0.14),
+      inset 0 0 4px 0 rgba(var(--foreRGB), 0.2);
+    backdrop-filter: var(--acrylicBackdrop);
+    color: var(--fore);
+    border-radius: 20px;
+    font-family: var(--contentSecondary);
+    z-index: 30;
+
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s var(--accel);
+
+    &.show {
+      transition-timing-function: var(--sleek);
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .infoBoundRect {
+    position: fixed;
+    height: 300px;
+    width: 50%;
+    inset: 0;
+    z-index: 11;
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+interface Props {
+  id?: string;
+  className?: string;
+  deflateBottom?: boolean;
+  deflateTop?: boolean;
+}
+const { id, className, deflateBottom, deflateTop } = Astro.props;
+---
+
+<div
+  class=`mainGrid ${className || ""}`
+  id={id}
+  style=`${deflateBottom ? "padding-bottom: 0;" : ""} ${deflateTop ? "padding-top: 0;" : ""}`
+>
+  <slot />
+  <!-- grid content -->
+</div>
+
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  .mainGrid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+    grid-auto-rows: 300px;
+    width: 80%;
+    padding: 4rem 0;
+    font-family: var(--content);
+    background: var(--base);
+    transition: background 0.2s var(--sleek);
+    //background: red;
+    @include breakpoint(tablet) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    @include breakpoint(square) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(300px, auto);
+    }
+    @include breakpoint(tiny, mobile) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      grid-auto-rows: minmax(300px, auto);
+    }
+  }
+</style>

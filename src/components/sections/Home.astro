@@ -1,0 +1,397 @@
+---
+import Gridbox from "../../layouts/Gridbox.astro";
+import CardObject from "../../components/Card-object.astro";
+import B2GalleryIndex from "../b2Gallery_index.astro";
+import MediaCard from "../MediaCard.astro";
+---
+
+<div class="centering">
+  <div id="pageLabel">
+    <div class="menuMessageBox mini">Welcome!</div>
+  </div>
+
+  <Gridbox id="about">
+    <CardObject
+      image={{
+        src: "/content/illus/just.jpg",
+        alt: "Mary on top of a rooftop",
+        positionX: "60%",
+      }}
+      size="extraTall"
+    />
+    <CardObject
+      isTextCard
+      title="Hello!"
+      titleSize="bigger"
+      content="Halo! Hoi!"
+      contentSize="medium"
+      alignText="right"
+      size="wide"
+    />
+    <CardObject
+      isTextCard
+      isInvisible
+      size="mediumWide"
+      contentSize="regRead"
+      content=`
+      <span class="b7">I'm Ilham</span>, Primarily a multi-hobbyist of many things and is still growing. But so far I've delved the furthest into:
+      <ul>
+        <li>3D</li>
+        <li>Illustration</li>
+        <li>and various design works</li>
+      </ul>
+      As of recently, I've been looking into using my self-taught skills from all my hobbies into professional works.
+      `
+    />
+
+    <div
+      class="cards arrowCard material-symbols-rounded"
+      style="font-size: 250px; display: grid; place-items: center;"
+    >
+      arrow_downward
+    </div>
+
+    <CardObject
+      isTextCard
+      size="mediumWide"
+      contentSize="regRead"
+      content=`<p style="font-size:2rem">My work online alias goes by <span class='b7'>Dotswork</span>, otherwise you could simply call me <span class='b7'>Ilham</span>.</p>`
+      alignText="center"
+      alignTextVert="center"
+    />
+
+    <CardObject
+      image={{
+        src: "/content/dotswork.png",
+        alt: "Dotswork Logo",
+        position: "left",
+      }}
+    />
+
+    <CardObject
+      isTextCard
+      contentSize="regRead"
+      content=`This page purpose is to compile most of my personal and professional works into an online portfolio.`
+      alignText="center"
+      alignTextVert="center"
+    />
+    <CardObject
+      image={{
+        src: "/content/illus/grow.jpg",
+        alt: "Mareota with cocoa",
+        position: "right",
+      }}
+      size="wide"
+    />
+  </Gridbox>
+
+<!-- ------------------------------------------------------------------------------------------------------------------- -->
+  <Gridbox deflateBottom id="3d">
+    <CardObject
+      isTextCard
+      size="superWide"
+      title="(THREE)D"
+      titleSize="mediumWide"
+      content="<i>::Some of my most recent 3D works. Millions of vertices are extruded (allegedly).</i>"
+      contentSize="small"
+      fontOverrideContent="var(--contentSecondary)"
+      isInvisible
+    />
+  </Gridbox>
+
+  <Gridbox deflateTop>
+    <MediaCard
+      size="big"
+      video={{
+        src: "/content/3d/neonixEasy.webm",
+        alt: "An advert-like presentation of a custom nixie tube clock design.",
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/3d/curt.webm",
+        alt: "Fabric curtain simulation demo in an indoor setting.",
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      image={{
+        src: "/content/3d/qublast.jpg",
+        alt: "'QUBLAST' Inspired by the hacking tool alike 'FLipper Zero' combined with a mini oscilloscope multimeter/multitool.",
+        position: "center",
+      }}
+    />
+    <MediaCard
+      size="mediumWide"
+      image={{
+        src: "/content/3d/muzen.jpg",
+        alt: "A love letter to Muzen's 'Wild Jeep' Bluetooth speaker design bonus with a pile of my nixie tube models next to it.",
+        position: "center",
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/3d/rob.webm",
+        alt: "Modelling challenge of a spherical robot.",
+      }}
+    />
+    <MediaCard
+      size="mediumWide"
+      video={{
+        src: "/content/3d/coolfab.webm",
+        alt: "Very detailed towel-like fabric along with its cloth physics.",
+      }}
+    />
+    <MediaCard
+      size="extraTall"
+      image={{
+        src: "/content/3d/nnSpindle.jpg",
+        alt: "'QUBLAST' Inspired by the hacking tool alike 'FLipper Zero' combined with a mini oscilloscope multimeter/multitool.",
+      }}
+    />
+    <MediaCard
+      size="big"
+      video={{
+        src: "/content/3d/nnDebug.webm",
+        alt: "An advert-like presentation of a custom nixie tube clock design.",
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      size="tall"
+      video={{
+        src: "/content/3d/neonix.webm",
+        alt: "'Neo-Classic' Design numerical nixie tube with functional controller.",
+      }}
+    />
+    <MediaCard
+      size="superWide"
+      video={{
+        src: "/content/3d/XMB.webm",
+        alt: "A 3D recreation of the classic PlayStation XMB menu.",
+      }}
+    />
+  </Gridbox>
+<!-- ------------------------------------------------------------------------------------------------------------------- -->
+  <!-- <Gridbox deflateBottom id="graphical_design">
+    <CardObject
+      isTextCard
+      size="superWide"
+      title="Graphics Design"
+      titleSize="mediumWide"
+      content="<i>::Latest graphic designs. Lost count on how many times illustrator craches.</i>"
+      contentSize="small"
+      fontOverrideContent="var(--contentSecondary)"
+      isInvisible
+    />
+  </Gridbox>
+  <Gridbox deflateTop>
+
+  </Gridbox> -->
+<!-- ------------------------------------------------------------------------------------------------------------------- -->
+  <Gridbox deflateBottom id="motion_design">
+    <CardObject
+      isTextCard
+      size="superWide"
+      title="Motion Design & Graphics"
+      titleSize="mediumWide"
+      content="<i>::Latest motion design & graphics. Lost count on how many times Illustrator craches. After Effects is no better.</i>"
+      contentSize="small"
+      fontOverrideContent="var(--contentSecondary)"
+      isInvisible
+    />
+  </Gridbox>
+  <Gridbox deflateTop>
+    <MediaCard
+      size="tall"
+      video={{
+        src: "/content/modesig/moonlight.webm",
+        alt: `Unconventional dynamic music visualizer out of the song 'Moonlight' by 7dB, syncing the song by a literal bpm clock on the bottom left I added. and add several unique quirks on some synth instruments or song progression.`,
+        volume: 0.15,
+      }}
+    />
+    <MediaCard
+      size="big"
+      video={{
+        src: "/content/modesig/envelope.webm",
+        alt: `Typography animation of a fictional company name "Envelope"`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/modesig/hoovesies.webm",
+        alt: `"Hoovesies" by VyletPony, Unconventional music visualizer using a visual break down of the music composition`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/modesig/c.webm",
+        alt: `Motion design improvisation out of a letter 'C'.`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      size="mediumWide"
+      video={{
+        src: "/content/modesig/imightbeabeliever.webm",
+        alt: `"I Might Be a Believer" by Paper Idol, Typography music video using mixed media of both 2D and 3D elements`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      size="big"
+      video={{
+        src: "/content/modesig/debug_demo.webm",
+        alt: `A believably animated debug/diagnostic screen of the NeoNix nixie tube clock project`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/modesig/retroux.webm",
+        alt: `It looks horrid in quality (And small!), but not by accident. It is infact to emulate the old school screen capture of a Nintendo DS back in the days of YouTube. The 'UX' itself in the background isn't from any real game. It simply is a mockup of a UX/UI for an NDS game I completely made up.`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      video={{
+        src: "/content/modesig/jh.webm",
+        alt: `One day I woke up and decided to make one of my good friends an animated logo out of nowhere.`,
+        volume: 0.5,
+      }}
+    />
+  </Gridbox>
+</div>
+
+<style lang="scss">
+  @use "../../../src/styles/_mixins" as *;
+  .centering {
+    background: var(--base);
+    transition: background 0.2s var(--sleek);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    user-select: none;
+    @include breakpoint(tablet) {
+      padding: 2em;
+    }
+  }
+  #pageLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+  }
+  .label {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background: var(--fore);
+    font-size: 2rem;
+    font-family: var(--display);
+    font-weight: 700;
+    padding: 0.2em 0.5em;
+    color: var(--base);
+    border-radius: 15px;
+    min-height: 51.78px;
+    min-width: 4rem;
+    transition:
+      background 0.2s var(--sleek),
+      color 0.2s var(--sleek);
+  }
+
+  .labelLoadCont {
+    position: absolute;
+    display: flex;
+  }
+  .labelLoad {
+    animation: shakeVert 1s infinite;
+    &:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+  }
+  @keyframes dotBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  .labelSecondary {
+    font-family: var(--doto);
+    font-size: 1rem;
+    margin-top: 0.5em;
+    color: var(--accent);
+    font-weight: bold;
+    transition: color 0.2s var(--sleek);
+  }
+  .menuMessageBox {
+    position: relative;
+    color: var(--fore);
+    padding: 0.5em 0.8em;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 2em;
+    font-size: 1.3rem;
+    font-family: var(--content);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.205);
+    @include breakpoint(tiny, mobile) {
+      width: 95%;
+    }
+    @include breakpoint(tablet) {
+      width: 100%;
+    }
+
+    &.slotStat {
+      display: none;
+    }
+    &.mini {
+      font-size: 1rem;
+      color: var(--fore);
+      margin-top: 1em;
+      width: 100%;
+      max-width: 100%;
+      padding: 0.5em 1em;
+      border: 2px solid var(--fore);
+      justify-content: center;
+      box-shadow: none;
+      & .b7 {
+        margin-left: 0.2rem;
+      }
+    }
+  }
+  .mmMsgBox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mmIconBox {
+    --size: 70px;
+    width: calc(var(--size) + (var(--size) / 4));
+    min-width: calc(var(--size) + (var(--size) / 4));
+    height: var(--size);
+    margin-right: 1em;
+    border-right: 2px solid var(--fore);
+    background-position: left !important;
+    background-repeat: no-repeat !important;
+  }
+  .mmMsgTitle {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .mmMsg {
+    padding-top: 0.1em;
+  }
+</style>

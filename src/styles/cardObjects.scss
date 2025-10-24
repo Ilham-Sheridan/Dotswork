@@ -1,0 +1,562 @@
+@use "./mixins" as *;
+
+.cards {
+    position: relative;
+    color: var(--fore);
+    max-width: 100%;
+    background: var(--baseSecondary);
+    border-radius: 20px;
+    word-wrap: break-word;
+    overflow: hidden;
+    transition: all 1s var(--sleek);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.linkcard {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    transition: all 0.5s var(--sleek) !important;
+    text-decoration: none !important;
+    background: var(--baseSecondary);
+
+    &:hover {
+        background: rgba(var(--accentRGB), .5);
+        backdrop-filter: var(--acrylicBackdrop);
+        box-shadow:
+            inset 0 0 10px 0 rgba(var(--foreRGB), 0.5);
+        transform: scale(1.1) rotate(3deg) !important;
+
+        .dynamicarrow {
+            margin-left: 10px;
+        }
+
+        .line {
+            opacity: 1;
+        }
+
+        .arrow {
+            transform: translateX(3px);
+        }
+
+        .textcard {
+            color: var(--fore);
+        }
+
+        &.linkreturn:hover {
+            background: var(--stop);
+        }
+
+        &::before {
+            background: var(--accentSecondary);
+            opacity: 1;
+            transform: scale(0.9) rotate(-5deg) !important;
+            z-index: -1;
+        }
+
+        &.linkreturn::before {
+            background: var(--warn);
+        }
+    }
+
+    &::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        background: black;
+        position: absolute;
+        z-index: -1;
+        transition: all 0.5s var(--sleek);
+        opacity: 0;
+        border-radius: 20px;
+    }
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.customarrow {
+    stroke-width: 2px;
+    fill: none;
+    stroke: var(--fore);
+    width: 40px;
+    height: 40px;
+    margin-left: 7px;
+    transition: all 0.15s;
+    margin-top: 1rem;
+}
+
+.line {
+    opacity: 0;
+}
+
+.invis {
+    background: none;
+    box-shadow: none;
+}
+
+.gimgs {
+    cursor: pointer;
+}
+
+.tallcard {
+    grid-row: span 2/auto;
+
+    @include breakpoint(tiny, mobile, tablet, square) {
+        grid-row: span 1/auto;
+    }
+}
+
+.extratallcard {
+    grid-row: span 3/auto;
+
+    @include breakpoint(tiny, mobile, tablet, square) {
+        grid-row: span 2/auto;
+    }
+}
+
+.bigcard {
+    grid-row: span 2/auto;
+    grid-column: span 2/auto;
+
+    @include breakpoint(tiny, mobile, tablet, square) {
+        grid-row: 1/auto;
+        grid-column: 1/auto;
+    }
+}
+
+.widecard {
+    grid-column: span 3/auto;
+
+    @include breakpoint(tablet) {
+        grid-column: span 2/auto;
+    }
+
+    @include breakpoint(tiny, mobile, square) {
+        grid-column: span 1/auto;
+    }
+}
+
+.superwidecard {
+    grid-column: span 4/auto;
+
+    @include breakpoint(tablet, square) {
+        grid-column: span 2/auto;
+    }
+
+    @include breakpoint(tiny, mobile) {
+        grid-column: span 1/auto;
+    }
+}
+
+.mediumwidecard {
+    grid-column: span 2/auto;
+
+    @include breakpoint(tiny, mobile, square) {
+        grid-column: span 1/auto;
+    }
+}
+
+.ghost {
+    display: none;
+}
+
+.dynamicUpscale-small-mediumwide {
+    grid-row: span 1/auto;
+    grid-column: span 1/auto;
+}
+
+.dynamic-tall-mediumwide {
+    grid-row: span 2/auto;
+}
+
+.dynamic-mediumwide-tall {
+    grid-column: span 2/auto;
+}
+
+.titlecard {
+    grid-column: span 3/auto;
+}
+
+.ghost {
+    display: block;
+}
+
+/*textcard--------------------------------*/
+
+.textcard {
+    padding: 1rem;
+    font-family: var(--content);
+    font-size: 2rem;
+    color: var(--fore);
+}
+
+.titletextcard {
+    font-size: 2.2rem;
+    font-family: var(--display);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    border-bottom: solid var(--fore) 1px;
+
+    &.tcreg,
+    &.tcsmall {
+        font-family: var(--content);
+        font-weight: 700;
+        border: none;
+        margin-bottom: .1rem;
+    }
+
+    &.tcregRead {
+        font-family: var(--text);
+        font-weight: 700;
+        border: none;
+        margin-bottom: .1rem;
+    }
+
+    @include breakpoint(tablet) {
+        font-size: 1.5rem;
+    }
+}
+
+.verticalAligment {
+    display: flex;
+
+    &.alignTop {
+        align-items: flex-start;
+    }
+    &.alignCenter {
+        align-items: center;
+    }
+    &.alignBottom {
+        align-items: flex-end;
+    }
+}
+
+/*sizes*/
+.tcmedium {
+    font-size: 5rem;
+    font-family: var(--display);
+    font-weight: 500;
+
+    @include breakpoint(tablet, square) {
+        font-size: 3.5rem;
+    }
+
+    @include breakpoint(tiny, mobile) {
+        font-size: 2.5rem;
+    }
+}
+
+.tcmediumWide {
+    font-size: 5rem;
+    font-family: var(--display);
+    font-weight: 900;
+
+    @include breakpoint(tablet, square) {
+        font-size: 3.5rem;
+    }
+
+    @include breakpoint(tiny, mobile) {
+        font-size: 2.5rem;
+    }
+}
+
+.tcbig {
+    font-size: 7.5rem;
+    font-family: var(--display);
+    font-weight: 500;
+
+    @include breakpoint(square) {
+        font-size: 5rem;
+    }
+
+    @include breakpoint(tiny, mobile, tablet) {
+        font-size: 4rem;
+    }
+}
+
+.tcbigWide {
+    font-size: 7.5rem;
+    font-family: var(--display);
+    font-weight: 900;
+
+    @include breakpoint(tablet, square) {
+        font-size: 5rem;
+    }
+
+    @include breakpoint(tiny, mobile) {
+        font-size: 4rem;
+    }
+}
+
+.tcbigger {
+    font-size: 8rem;
+    font-family: var(--display);
+    font-weight: 900;
+
+    @include breakpoint(square) {
+        font-size: 5rem;
+        font-weight: 720;
+    }
+
+    @include breakpoint(tiny, mobile, tablet) {
+        font-size: 4rem;
+        font-weight: 720;
+    }
+}
+
+.tchuge {
+    font-size: 11rem;
+    font-family: var(--display);
+    font-weight: 900;
+
+    @include breakpoint(square) {
+        font-size: 7rem;
+    }
+
+    @include breakpoint(tiny, mobile, tablet) {
+        font-size: 3rem;
+    }
+}
+
+.tcreg {
+    font-size: 1.2rem;
+    font-family: var(--contentsecondary);
+
+    @include breakpoint(tiny, mobile) {
+        font-size: 1rem;
+    }
+}
+
+.tcregRead {
+    font-family: var(--text);
+    line-height: 1.7;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: -.62pt;
+
+    @include breakpoint(tiny, mobile) {
+        font-size: 1rem;
+    }
+}
+
+.tcsmall {
+    font-family: var(--text);
+    line-height: 1.7;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.tcsubquote {
+    font-family: var(--contentsecondary);
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.tcquotation {
+    font-family: var(--contentsecondary);
+    font-size: 1rem;
+    font-style: italic;
+    margin-top: 1em;
+    color: var(--textsecondaryD);
+}
+
+.wlimiter {
+    width: 70%;
+}
+
+/*textcard--------------------------------*/
+/*backgroundtext--------------------------*/
+
+.textcontainer {
+    position: relative;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 1rem;
+    background: linear-gradient(rgba(0, 0, 0, 0) 60%, rgba(var(--baseRGB), 0.69) 85%, rgba(var(--baseRGB), .95) 100%);
+}
+
+.textgroup {
+    position: relative;
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    font-family: var(--content);
+    color: var(--fore);
+    letter-spacing: -.62pt;
+}
+
+.bypass {
+    position: absolute;
+}
+
+.imgtext {
+    margin-bottom: 0.5rem;
+}
+
+/*backgroundtext--------------------------*/
+/*thumbnailcard---------------------------*/
+
+.thumbtextcontainer {
+    position: relative;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.thumbtextgroup {
+    max-width: 100%;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    font-family: var(--content);
+    color: var(--fore);
+    background: var(--baseSecondary);
+    letter-spacing: -.62pt;
+}
+
+/*thumbnailcard---------------------------*/
+.go {
+    margin-right: 1rem;
+    padding: 10px 10px 10px 15px;
+    color: var(--fore);
+    box-sizing: border-box;
+    border: solid 1px var(--fore);
+    display: flex;
+    font-size: .9rem;
+    font-family: var(--content);
+    font-weight: 500;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    transition: all 0.15s;
+    letter-spacing: -.62pt;
+}
+
+.wideGo {
+    position: relative;
+    border: 1px solid var(--fore);
+    font-family: var(--display);
+    color: var(--fore);
+    padding: 1em 20vw;
+    border-radius: 50px;
+    opacity: 1;
+    cursor: pointer;
+    transition: all 0.2s var(--fast);
+
+    &:hover {
+        background: var(--fore);
+        color: var(--base);
+
+        .wideGoTitle {
+            color: var(--base);
+        }
+
+        .dynamicarrow {
+            margin-left: 10px;
+            stroke: var(--base);
+        }
+
+        .line {
+            opacity: 1;
+        }
+
+        .arrow {
+            transform: translateX(3px);
+        }
+    }
+}
+
+.wideGoTitle {
+    color: var(--fore)
+}
+
+.dynamicarrow {
+    stroke-width: 2px;
+    fill: none;
+    stroke: var(--fore);
+    width: 10px;
+    height: 10px;
+    margin-left: 7px;
+    transition: all 0.15s;
+}
+
+.line {
+    opacity: 0;
+}
+
+.arrow,
+.line {
+    transition: 150ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.go:hover {
+    background: var(--prim);
+    border: solid 1px rgba(255, 255, 255, 0);
+
+    .dynamicarrow {
+        margin-left: 10px;
+    }
+
+    .line {
+        opacity: 1;
+    }
+
+    .arrow {
+        transform: translateX(3px);
+    }
+}
+
+.imgs {
+    position: absolute;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: all .2s var(--sleek);
+
+    &.relative {
+        position: relative;
+    }
+
+    &.leftoffset {
+        -o-object-position: left;
+        object-position: left;
+    }
+
+    &.rightoffset {
+        -o-object-position: right;
+        object-position: right;
+    }
+
+    &.topoffset {
+        -o-object-position: top;
+        object-position: top;
+    }
+
+    &.bottomoffset {
+        -o-object-position: bottom;
+        object-position: bottom;
+    }
+}

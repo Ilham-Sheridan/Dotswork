@@ -1,0 +1,264 @@
+---
+import "../styles/cardObjects.scss";
+
+type BaseProps = {
+  /** Disables background */
+  isInvisible?: boolean;
+
+  /** Textcard */
+  isTextCard?: boolean;
+
+  /** Image with a text overlay */
+  isBackgroundText?: boolean;
+
+  isLinkCard?: false;
+
+  /** If true, the card acts as a link */
+  isLink?: false;
+
+  /** URL for the link card */
+  href?: undefined;
+
+  /** Link behavior */
+  href_target?: "_blank" | "_self" | "_parent" | "_top" | undefined | null;
+
+  /** If true, styles the card as a return/back link */
+  isReturnLink?: boolean;
+
+  /** Card size modifier */
+  size?: "tall" | "extraTall" | "big" | "wide" | "superWide" | "mediumWide";
+
+  /** Text alignment for title and content */
+  alignText?: "left" | "center" | "right";
+  alignTextVert?: "top" | "center" | "bottom";
+
+  /** Title text for the card */
+  title?: string;
+
+  /** Size of the title text */
+  titleSize?:
+    | "medium"
+    | "mediumWide"
+    | "big"
+    | "bigWide"
+    | "bigger"
+    | "huge"
+    | "reg"
+    | "regRead"
+    | "small";
+
+  /** Content text for the card */
+  content?: string;
+
+  /** Size of the content text */
+  contentSize?:
+    | "medium"
+    | "big"
+    | "bigger"
+    | "huge"
+    | "reg"
+    | "regRead"
+    | "small";
+
+  /** Image properties for the card */
+  image?: {
+    /** Image source URL */
+    src: string;
+
+    /** Alt text for the image */
+    alt: string;
+
+    /** Image position in the card */
+    position?: "left" | "right" | "top" | "bottom" | "center";
+    positionY?: string;
+    positionX?: string;
+  };
+
+  /** Override with FONT NAME only */
+  styleOverride?: string;
+
+  /** Override with FONT NAME only */
+  fontOverrideContent?: string;
+
+  /** Add custom class */
+  class?: string;
+};
+
+type LinkProps = Omit<BaseProps, "isLink" | "href"> & {
+  isLink: true;
+  href: string;
+};
+type LinkCardProps = Omit<BaseProps, "isLinkCard" | "href"> & {
+  isLinkCard: true;
+  href: string;
+};
+
+type Props = BaseProps | LinkProps | LinkCardProps;
+
+const {
+  isInvisible = false,
+  isTextCard = false,
+  isBackgroundText = false,
+  size,
+  alignText = "left",
+  alignTextVert,
+  title,
+  titleSize = "bigger",
+  content,
+  contentSize = "regRead",
+  isLink = false,
+  isLinkCard = false,
+  href,
+  href_target,
+  isReturnLink = false,
+  image,
+  styleOverride,
+  fontOverrideContent,
+  class: className,
+} = Astro.props;
+
+// // Helper function to handle font override
+// const getFontStyle = (font?: string) => {
+//   if (!font) return {};
+//   return { style: `font-family: var(${font})` };
+// };
+// use
+// {...getFontStyle(fontOverride)}
+
+// Build dynamic classes
+const cardClasses = [
+  "cards",
+  isInvisible && "invis",
+  isTextCard && "textcard",
+  alignTextVert && "verticalAligment " +
+  {
+    top: "alignTop",
+    center: "alignCenter",
+    bottom: "alignBottom",
+  }[alignTextVert],
+  size &&
+    {
+      tall: "tallcard",
+      extraTall: "extratallcard",
+      big: "bigcard",
+      wide: "widecard",
+      superWide: "superwidecard",
+      mediumWide: "mediumwidecard",
+    }[size],
+  isLink,
+  isReturnLink && "linkreturn",
+  fontOverrideContent,
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+
+const titleClasses = ["titletextcard", `tc${titleSize}`]
+  .filter(Boolean)
+  .join(" ");
+
+const contentClasses = [`tc${contentSize}`].filter(Boolean).join(" ");
+---
+
+{
+  isLinkCard ? (
+    <!-- LinkCard -->
+    <a
+      target={href_target ? href_target : "_blank"}
+      href={href}
+      class={`cards linkcard ${className ?? ""}`}
+    >
+      <div class="textcard invis bigger col">
+        <b>{title ?? "?"}</b>
+        <svg class="customarrow" viewBox="0 0 10 10">
+          <g>
+            <path class="line" d="M0 5h7" />
+            <path class="arrow" d="M1 1l4 4-4 4" />
+          </g>
+        </svg>
+      </div>
+    </a>
+  ) : isLink || isBackgroundText ? (
+    <!-- Link or BackgroundText Card -->
+    <div class={`${cardClasses} backgroundtext`}>
+      {image && (
+        <img
+          src={image.src}
+          alt={image.alt}
+          class:list={["imgs", image.position && `${image.position}offset`]}
+          style={{
+            ...(image.positionX || image.positionY ? {objectPosition: `${image.positionX ?? "50%"} ${image.positionY ?? "50%"}`} : {})
+          }}
+        />
+      )}
+      <div class="textcontainer">
+        <div class="textgroup">
+          <div class="imgtext">
+            {title && (
+              <div
+                style={{ textAlign: alignText }}
+                class={titleClasses}
+                set:html={title}
+              />
+            )}
+            {content && (
+              <div
+                style={{
+                  textAlign: alignText,
+                  fontFamily: fontOverrideContent,
+                }}
+                class={contentClasses}
+                set:html={content}
+              />
+            )}
+            <slot />
+          </div>
+          {isLink && (
+            <div class="buttonalign">
+              <a href={href}>
+                <div class="go">
+                  <svg class="dynamicarrow" viewBox="0 0 10 10">
+                    <g>
+                      <path class="line" d="M0 5h7" />
+                      <path class="arrow" d="M1 1l4 4-4 4" />
+                    </g>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  ) : (
+    <!-- Default Card -->
+    <div class={cardClasses}>
+      {image && (
+        <img
+          src={image.src}
+          alt={image.alt}
+          class:list={["imgs", image.position && `${image.position}offset`]}
+          style={{
+            ...(image.positionX || image.positionY ? {objectPosition: `${image.positionX ?? "50%"} ${image.positionY ?? "50%"}`} : {})
+          }}
+        />
+      )}
+      {/* if title AND parameter input exists */}
+      {title && (
+        <div
+          style={{ textAlign: alignText }}
+          class={titleClasses}
+          set:html={title}
+        />
+      )}
+      {content && (
+        <div
+          style={{ textAlign: alignText, fontFamily: fontOverrideContent }}
+          class={contentClasses}
+          set:html={content}
+        />
+      )}
+      <slot />
+    </div>
+  )
+}

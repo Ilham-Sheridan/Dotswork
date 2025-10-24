@@ -1,0 +1,720 @@
+<div class="chptOverlay">
+  <div class="creationdialog">
+    <div class="exit">
+      <div class="xcont">
+        <div class="x"></div>
+      </div>
+    </div>
+    <div class="cbuttongroup">
+      <a href="#3d">
+        <div class="illus cbutton block sGall">(THREE)D</div>
+      </a>
+      <!-- <a href="#graphical_design">
+        <div class="anim cbutton block sComm">Graphics Design</div>
+      </a> -->
+      <a href="#motion_design">
+        <div class="sket cbutton block sTriv">Motion Design & Graphics</div>
+      </a>
+      <!-- <a href="#extra">
+        <div class="extra cbutton block sExtr">EXTRA</div>
+      </a> -->
+    </div>
+  </div>
+</div>
+
+<div class="filterPanelOverlay">
+  <div class="filterPanel">
+    <label class="filterToggleObject ftObj_Versioning">
+      <input type="checkbox" id="versioningFTT" class="filterCheckbox" />
+      <div class="filterAttributes">
+        <div class="filterIcon material-symbols-rounded">difference</div>
+        <div class="filterName">Versioning</div>
+      </div>
+      <div class="filterSwitchCont">
+        <div class="pill">
+          <div class="dot"></div>
+        </div>
+      </div>
+    </label>
+    <label class="filterToggleObject ftObj_Sketch">
+      <input type="checkbox" id="sketchFTT" class="filterCheckbox" />
+      <div class="filterAttributes">
+        <div class="filterIcon material-symbols-rounded">draw_abstract</div>
+        <div class="filterName">Sketches</div>
+      </div>
+      <div class="filterSwitchCont">
+        <div class="pill">
+          <div class="dot"></div>
+        </div>
+      </div>
+    </label>
+    <label class="filterToggleObject ftObj_NSFW">
+      <input type="checkbox" id="nsfwFTT" class="filterCheckbox" />
+      <div class="filterAttributes">
+        <div class="filterIcon material-symbols-rounded">explicit</div>
+        <div class="filterName">Explicit</div>
+      </div>
+      <div class="filterSwitchCont">
+        <div class="pill">
+          <div class="dot"></div>
+        </div>
+      </div>
+    </label>
+  </div>
+  <div class="filterPanel refreshIndicator">
+    <div class="refreshInd">
+      <div class="rTitle">Refreshing filters...</div>
+      <div class="progBarBox">
+        <div class="progBar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="dynamicnav navDormant">
+  <a id="nlogo" href="/">
+    <div class="backButton material-symbols-rounded">arrow_back_ios_new</div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 424.08 424.08">
+      <path
+        class="ndots"
+        d="M105.14,52.57c0,29.03-23.54,52.57-52.57,52.57S0,81.61,0,52.57,23.54,0,52.57,0s52.57,23.54,52.57,52.57ZM52.57,160.05c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57-23.54-52.57-52.57-52.57ZM212.62,0c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57S241.66,0,212.62,0ZM52.57,318.93c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57-23.54-52.57-52.57-52.57ZM212.62,318.93c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57-23.54-52.57-52.57-52.57ZM371.51,0c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57S400.54,0,371.51,0ZM212.62,160.05c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57-23.54-52.57-52.57-52.57ZM371.51,160.05c-29.03,0-52.57,23.54-52.57,52.57s23.54,52.57,52.57,52.57,52.57-23.54,52.57-52.57-23.54-52.57-52.57-52.57Z"
+      ></path>
+    </svg>
+  </a>
+  <div class="buttongroup">
+    <a href="#about" class="nbutton about">
+      Hello.
+      <span class="strikethrough sAbout"></span>
+    </a>
+    <div class="nbutton openChapterList">
+      [:::]
+      <span class="strikethrough s2"></span>
+    </div>
+    <div class="nbutton openFilter">[FILTER]</div>
+  </div>
+</nav>
+
+<script>
+  import { devConsole } from "./utils/devConsole";
+  import "./dynamicNav_filterLogic";
+
+  let isGalleryPage = false;
+
+  function navLogic() {
+    let winH = window.innerHeight;
+    const nav = document.querySelector(".dynamicnav");
+
+    function navDisplayMode() {
+      if (!nav) return;
+      if (!isGalleryPage && window.scrollY > winH / 1.2) {
+        nav.classList.remove("navDormant");
+      } else if (isGalleryPage) {
+        nav.classList.remove("navDormant");
+      } else {
+        nav.classList.add("navDormant");
+      }
+    }
+    window.addEventListener("scroll", navDisplayMode);
+    window.addEventListener("resize", () => {
+      winH = window.innerHeight;
+      navDisplayMode();
+    });
+    navDisplayMode();
+
+    // chapter dialog logic
+    const aboutButton = document.querySelector(".nbutton.about") as HTMLElement;
+    const chapterListButton = document.querySelector(
+      ".nbutton.openChapterList"
+    ) as HTMLElement;
+
+    const chptOverlay = document.querySelector(".chptOverlay") as HTMLElement;
+    const creationDialog = document.querySelector(".creationdialog");
+    const xconts = document.querySelectorAll(".xcont, .cbutton");
+    const X = document.querySelector(".xcont") as HTMLElement | null;
+
+    if (chapterListButton && creationDialog && !isGalleryPage) {
+      devConsole("Creation dialog initialized");
+      chapterListButton.addEventListener("click", () => {
+        chptOverlay.classList.add("active");
+        creationDialog.classList.add("cdactive");
+        setTimeout(() => {
+          X?.classList.add("xActive");
+        }, 200);
+      });
+      xconts.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          creationDialog.classList.remove("cdactive");
+          chptOverlay.classList.remove("active");
+          X?.classList.remove("xActive");
+        });
+      });
+    } else {
+      aboutButton.style.display = "none";
+      chapterListButton.style.display = "none";
+    }
+
+    // nav button toggles
+    const nlogo = document.getElementById("nlogo") as HTMLElement;
+    const openFilterButton = document.querySelector(
+      ".openFilter"
+    ) as HTMLElement;
+    const filterPanelOverlay = document.querySelector(
+      ".filterPanelOverlay"
+    ) as HTMLElement;
+    const backButton = document.querySelector(".backButton") as HTMLElement;
+
+    if (isGalleryPage) {
+      nlogo.classList.add("backButtonPresent");
+      nlogo.setAttribute("href", "/#gall");
+      openFilterButton.addEventListener("click", () => {
+        filterPanelOverlay.classList.toggle("active");
+      });
+      filterPanelOverlay.addEventListener("click", () => {
+        filterPanelOverlay.classList.toggle("active");
+      });
+    } else {
+      nlogo.classList.remove("backButtonPresent");
+      openFilterButton.style.display = "none";
+      backButton.style.display = "none";
+    }
+    //filterPanelOverlay?.classList.toggle("active");
+
+    // Section highlight logic
+    function chapter() {
+      if (isGalleryPage) return;
+      // Helper to get offset safely
+      function getOffsetTop(id: string): number {
+        const el = document.getElementById(id);
+        if (!el) return Infinity;
+        return el.getBoundingClientRect().top;
+      }
+      const offsets = {
+        about: getOffsetTop("about"),
+        gall: getOffsetTop("gall"),
+        comm: getOffsetTop("comm"),
+        trivia: getOffsetTop("trivia"),
+        extra: getOffsetTop("extra"),
+      };
+      // State for which section is active
+      const bools: Record<string, boolean> = {
+        aboutbool: false,
+        createbool: false,
+        gallbool: false,
+        commbool: false,
+        triviabool: false,
+        extrabool: false,
+      };
+      const sectionsBoolers = [
+        { offset: offsets.about, bool: "aboutbool" },
+        { offset: offsets.gall, bool: "gallbool", prevBool: "aboutbool" },
+        { offset: offsets.comm, bool: "commbool", prevBool: "gallbool" },
+        { offset: offsets.trivia, bool: "triviabool", prevBool: "commbool" },
+        { offset: offsets.extra, bool: "extrabool", prevBool: "triviabool" },
+      ];
+      sectionsBoolers.forEach((section) => {
+        if (section.offset <= 0) {
+          bools[section.bool] = true;
+          if (section.prevBool) bools[section.prevBool] = false;
+        } else {
+          bools[section.bool] = false;
+        }
+      });
+      const sections = [
+        { bool: bools.aboutbool, selector: ".sAbout" },
+        { bool: bools.gallbool, selector: ".sGall" },
+        { bool: bools.commbool, selector: ".sComm" },
+        { bool: bools.triviabool, selector: ".sTriv" },
+        { bool: bools.extrabool, selector: ".sExtr" },
+      ];
+      sections.forEach((section) => {
+        const el = document.querySelector(section.selector);
+        if (!el) return;
+        if (section.bool) {
+          el.classList.add("navbHighlight");
+        } else {
+          el.classList.remove("navbHighlight");
+        }
+      });
+    }
+    chapter();
+    window.addEventListener("scroll", chapter);
+  }
+
+  function initPreset() {
+    const currentPath = window.location.pathname;
+    if (currentPath.includes("gallery")) {
+      isGalleryPage = true;
+    } else {
+      isGalleryPage = false;
+    }
+    navLogic();
+  }
+
+  document.addEventListener("DOMContentLoaded", initPreset);
+  document.addEventListener("astro:after-swap", initPreset);
+</script>
+
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  .dynamicnav {
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem 0 0;
+    z-index: 5;
+    background: rgba(var(--baseRGB), 0.7);
+    backdrop-filter: var(--acrylicBackdrop);
+    user-select: none;
+    transition: all 0.2s var(--sleek);
+    height: var(--navHeight);
+  }
+
+  .navDormant {
+    background: var(--base);
+    transition-timing-function: var(--accel);
+    transform: translateY(calc(var(--navHeight) * -1));
+  }
+
+  .navHide {
+    transition: all 0.2s 0.5s var(--sleek);
+    transform: translateY(-40px);
+  }
+
+  #nlogo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transform: scale(0.8);
+    text-decoration: none;
+    transition: background 0.2s var(--sleek);
+
+    &.backButtonPresent {
+      padding: 0.5em 0.5em 0.5em 0;
+      border-radius: 20px;
+      &:hover {
+        background: var(--accent);
+        .backButton {
+          color: var(--base);
+        }
+        .ndots {
+          fill: var(--base);
+        }
+      }
+    }
+
+    .backButton {
+      color: var(--fore);
+      font-size: 2rem;
+      transition: color 0.2s var(--sleek);
+    }
+
+    & svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .ndots {
+    width: 100%;
+    height: 100%;
+    fill: var(--fore);
+    fill-opacity: 1;
+    transition: fill 0.2s var(--sleek);
+  }
+
+  .buttongroup {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .nbutton {
+    background: rgba(0, 0, 0, 0);
+    color: var(--fore);
+    margin: 0 0.5rem;
+    font-family: var(--contentSecondary);
+    transition:
+      background 0.1s,
+      color 0.2s;
+    font-weight: 100;
+    border-radius: 0 5px 0 0;
+    padding: 0.3rem;
+    cursor: pointer;
+
+    &:has(.strikethrough.navbHighlight) {
+      text-decoration: none;
+    }
+
+    /*
+    &:hover::before {
+      content: "::"
+    }*/
+
+    &:hover {
+      background: var(--fore);
+      color: var(--base);
+      font-weight: 900;
+
+      .strikethrough {
+        background-color: var(--base);
+      }
+    }
+    .strikethrough {
+      position: relative;
+      display: block;
+      height: 3px;
+      background-color: var(--fore);
+      width: 0%;
+      transition: all 0.5s var(--sleek);
+      &.navbHighlight {
+        width: 100%;
+      }
+    }
+  }
+
+  .chptOverlay {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    top: 0;
+    position: fixed;
+    z-index: 6;
+    display: flex;
+    justify-content: flex-end;
+    //padding: 4em 2em 2em 0em;
+    transition: all 0.2s var(--sleek);
+    pointer-events: none;
+
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  .creationdialog {
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--baseRGB), 0.5);
+    backdrop-filter: var(--acrylicBackdropStrong);
+    display: grid;
+    place-items: center;
+    animation: contentdialog 0.8s forwards var(--sleek);
+    opacity: 0;
+    transition: all 0.3s var(--accel);
+    transform: scale(1.5);
+    & a {
+      text-decoration: none;
+    }
+  }
+
+  .cdactive {
+    opacity: 1;
+    transition: all 0.3s var(--sleek);
+    transform: scale(1);
+  }
+
+  .cbutton {
+    text-align: center;
+    color: var(--fore);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 2.5rem;
+    transition: font-weight 0.5s var(--sleek);
+    margin: 1rem 0;
+
+    &:hover {
+      font-weight: 800;
+      color: var(--prim);
+    }
+    &.navbHighlight {
+      font-weight: 800;
+      transition: all 0.5s var(--sleek);
+      color: var(--accent);
+    }
+  }
+
+  .exit {
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+  }
+
+  .xcont {
+    width: 40px;
+    height: 40px;
+    margin-right: 2rem;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    padding: 2em;
+    border: 1px solid var(--fore);
+    transition:
+      transform 0.4s var(--sleek),
+      background 0.2s var(--sleek),
+      opacity 0.1s var(--sleek);
+    transform: translateX(50%);
+    opacity: 0;
+    cursor: pointer;
+
+    &.xActive {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    &:hover {
+      background: var(--fore);
+      & .x,
+      .x::after {
+        background: var(--base);
+      }
+    }
+  }
+
+  .x {
+    position: absolute;
+    background: var(--fore);
+    width: 4px;
+    transform: rotate(45deg);
+    height: 40px;
+    transition: 0.2s var(--sleek);
+
+    &::after {
+      content: "";
+      background: var(--fore);
+      width: 4px;
+      height: 100%;
+      transform: rotate(90deg);
+      position: absolute;
+      transition: 0.2s var(--sleek);
+    }
+  }
+
+  .filterPanelOverlay {
+    position: fixed;
+    right: 0;
+    top: var(--navHeight);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 0.5em;
+    z-index: 5;
+    padding: 1em;
+    user-select: none;
+
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.2s var(--accel);
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   inset: 0;
+    //   background: url("/public/content/illus/artist.jpg");
+    //   background-size: cover;
+    //   background-position: center;
+    //   z-index: -2;
+    // }
+
+    @include breakpoint(tiny, mobile) {
+      width: 100%;
+      align-items: center;
+    }
+
+    &.active {
+      transition-timing-function: var(--sleek);
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+  .filterPanel {
+    width: 100%;
+    max-width: 340px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    background: rgba(var(--baseRGB), 0.5);
+    backdrop-filter: var(--acrylicBackdrop);
+    box-shadow:
+      0 1px 4px 0 rgba(0, 0, 0, 0.14),
+      inset 0 0 10px 0 rgba(var(--foreRGB), 0.2);
+
+    transition:
+      background 1s var(--sleek),
+      transform 0.2s var(--sleek);
+
+    @include breakpoint(tiny, mobile) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+  .filterToggleObject {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    background: rgba(var(--baseRGB), 0.8);
+    border-radius: 20px;
+    color: var(--fore);
+    cursor: pointer;
+    transition:
+      background 0.2s var(--sleek),
+      color 0.2s var(--sleek);
+
+    &:hover {
+      background: rgba(var(--baseRGB), 0.6);
+    }
+
+    @include breakpoint(tiny, mobile) {
+      height: 100px;
+    }
+
+    .filterCheckbox {
+      position: absolute;
+      display: none;
+    }
+  }
+  .filterAttributes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    font-family: var(--content);
+    font-weight: bold;
+
+    .filterIcon {
+      font-size: 30px;
+    }
+  }
+  .filterSwitchCont {
+    --width: 50px;
+    --height: 20px;
+    --padding: 0.2em;
+    position: relative;
+
+    background: var(--alpha2baseD);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition:
+      background 0.2s var(--sleek),
+      color 0.2s var(--sleek);
+
+    .dot {
+      width: calc((var(--width) / 2) - var(--padding));
+      height: 100%;
+      border-radius: 99px;
+      transition: transform 0.2s var(--spring);
+      transform: translateX(0);
+      background: rgba(var(--primRGB), 0.7);
+      box-shadow:
+        0 0 2px 0 rgba(0, 0, 0, 0.14),
+        inset 0 0 4.6px 0 rgba(var(--baseRGB), 0.2);
+    }
+
+    .pill {
+      width: var(--width);
+      height: var(--height);
+      border-radius: 99px;
+      background: var(--base);
+      padding: var(--padding);
+      box-shadow: inset 0 0 4.6px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .FTon {
+    .dot {
+      transform: translateX(calc((var(--width) / 2) - var(--padding)));
+      background: rgba(var(--baseRGB), 0.9);
+      box-shadow:
+        0 0 2px 0 rgba(0, 0, 0, 0.14),
+        inset 0 0 calc(var(--height) / 3.5) 0 var(--accent);
+    }
+    .pill {
+      background: var(--accent);
+    }
+  }
+
+  .refreshIndicator {
+    border-radius: 99px;
+    background: rgba(var(--baseRGB), 1);
+    box-shadow: none;
+    transform: translateY(-20px);
+    opacity: 0;
+    z-index: -2;
+    display: none;
+    transition: all 0.2s var(--accel);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+
+    &.show {
+      transition-timing-function: var(--sleek);
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+
+  .refreshInd {
+    font-family: var(--content);
+    color: var(--fore);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rTitle {
+    color: var(--foreSecondary);
+    font-weight: 300;
+  }
+  .progBarBox {
+    width: 30%;
+    height: 5px;
+    background: var(--baseTertiary);
+    border-radius: 99px;
+
+    .progBar {
+      width: 2%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 1.2s ease-in-out;
+
+      &.start {
+        animation: refreshCooldown 1.2s ease-in-out forwards;
+      }
+    }
+  }
+  @keyframes refreshCooldown {
+    0% {
+      width: 0%;
+    }
+    20%,
+    70% {
+      width: 2%;
+    }
+    80%,
+    100% {
+      width: 98%;
+    }
+  }
+</style>

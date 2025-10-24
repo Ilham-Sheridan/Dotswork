@@ -1,0 +1,21 @@
+{
+  "name": "commsheetastr",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.7",
+    "astro": "^5.14.5",
+    "preact": "^10.26.6"
+  },
+  "devDependencies": {
+    "@types/dropzone": "^5.7.9",
+    "dropzone": "^6.0.0-beta.2",
+    "sass-embedded": "^1.86.3"
+  }
+}

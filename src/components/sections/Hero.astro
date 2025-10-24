@@ -1,0 +1,258 @@
+---
+const heroImages = [
+  { url: "/content/3d/muzen.jpg", pos: "center" },
+  { url: "/content/3d/qublast.jpg", pos: "center" },
+  { url: "/content/3d/veh.jpg", pos: "center" },
+  { url: "/content/3d/rob.jpg", pos: "center" },
+  { url: "/content/3d/wacom.jpg", pos: "center" },
+];
+// MAX 5
+---
+
+<div id="hello">
+  <div class="heroimage" id="heroSlideshow">
+    {
+      heroImages.map((image) => (
+        <div
+          style={`background-image:url(${image.url}); background-position:${image.pos}`}
+        />
+      ))
+    }
+  </div>
+  <div class="hero" id="hero">
+    <div class="theactualhello">Ilham S.L.</div>
+    <div class="uh">---- Portfolio ---------------------------------</div>
+  </div>
+</div>
+
+<a href="#about">
+  <div class="forwarder" id="forwarder">
+    <div class="arrowClip" id="arrowClip">
+      <div class=`arrow material-symbols-rounded`>arrow_downward</div>
+    </div>
+  </div>
+</a>
+
+<script>
+  function heroTransition() {
+    const forwarder = document.getElementById("forwarder");
+    const arrow = document.getElementById("arrowClip");
+    const heroElm = document.getElementById("hero");
+    const heroSlideshow = document.getElementById("heroSlideshow");
+    //const maxRounding = 99;
+    const scrollPosition = window.scrollY;
+    const windowHeight = window.innerHeight;
+
+    const offset = windowHeight * 0.2; // 8%
+    // const roundness = Math.max(
+    //   0,
+    //   maxRounding - ((scrollPosition + offset) / windowHeight) * maxRounding
+    // );
+    const heroOpacity = 1 - window.scrollY / (window.innerHeight - offset * 4);
+    const heroScale = 1 - Math.min(0.5, window.scrollY / window.innerHeight);
+    const slideshowOpacity = 1 - window.scrollY / window.innerHeight;
+    const arrowOpacity = 1 - window.scrollY / (window.innerHeight - offset * 2);
+
+    // TIL ? is a null checker
+    //forwarder?.style.setProperty("--topRounding", `${roundness}px`);
+    heroElm?.style.setProperty("opacity", `${heroOpacity}`);
+    heroElm?.style.setProperty("transform", `scale(${heroScale})`);
+    heroSlideshow?.style.setProperty("opacity", `${slideshowOpacity}`);
+    arrow?.style.setProperty("opacity", `${arrowOpacity}`);
+
+    if (slideshowOpacity <= 0) {
+      heroSlideshow?.style.setProperty("display", "none");
+    } else {
+      heroSlideshow?.style.setProperty("display", "flex");
+    }
+  }
+
+  window.addEventListener("scroll", heroTransition);
+  heroTransition();
+
+  document.addEventListener("astro:before-swap", () => {
+    heroTransition();
+  });
+</script>
+
+<!-- hero -->
+<style lang="scss">
+  @use "../../../src/styles/_mixins" as *;
+  #hello {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    z-index: -1;
+    user-select: none;
+    @include breakpoint(tiny, mobile) {
+      height: 10vh;
+      //display: none;
+      place-items: center start;
+      padding-left: 1em;
+    }
+  }
+
+  .hero {
+    position: relative;
+
+    /*margin-right: 40%;*/
+    color: var(--white);
+  }
+
+  .commlogo {
+    --logoSize: 300px;
+    width: var(--logoSize);
+    height: var(--logoSize);
+    .logoBase {
+      fill: white;
+    }
+    .logoText {
+      fill: black;
+    }
+
+    @include breakpoint(tiny, mobile) {
+      --logoSize: 60px;
+      .logoBase {
+        fill: var(--fore);
+      }
+      .logoText {
+        fill: var(--base);
+      }
+    }
+  }
+
+  .theactualhello {
+    font-family: var(--display);
+    font-size: 6rem;
+    font-weight: 800;
+    color: var(--fore);
+  }
+
+  .dialogue {
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .uh {
+    font-family: var(--contentSecondary);
+    color: var(--fore);
+    font-weight: 500;
+  }
+
+  .forwarder {
+    position: absolute;
+    background: linear-gradient(rgba(var(--baseRGB), 0), var(--base) 99%);
+    transition: background 0.2s var(--sleek);
+    width: 100%;
+    height: 50%;
+    bottom: 0;
+    border-radius: var(--topRounding) var(--topRounding) 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 1em;
+    @include breakpoint(tiny, mobile) {
+      display: none;
+    }
+  }
+  .arrowClip {
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    text-align: center;
+    border: 4px solid var(--fore);
+    box-sizing: content-box;
+    border-radius: 15px;
+  }
+  .arrow {
+    font-size: 3rem;
+    animation: clipDown 1s linear infinite;
+    color: var(--fore);
+  }
+  .noAnim {
+    animation: none;
+  }
+  @keyframes clipDown {
+    0% {
+      transform: translateY(-50px);
+      animation-timing-function: cubic-bezier(0.24, 0.01, 0.01, 1); // fast
+    }
+    50% {
+      transform: translateY(0px);
+      animation-timing-function: cubic-bezier(0.72, 0.06, 0.96, 0.57); // accel
+    }
+    100% {
+      transform: translateY(50px);
+    }
+  }
+
+  .heroimage {
+    position: absolute;
+    z-index: -1;
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: brightness(0.5);
+    @include breakpoint(tiny, mobile) {
+      display: none !important;
+    }
+
+    > div {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      animation: heroimage 25s var(--sleek) infinite;
+      opacity: 0;
+      transform: scale(1.2);
+    }
+  }
+
+  .heroimage > div {
+    &:nth-child(2) {
+      animation-delay: 5s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 10s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 15s;
+    }
+
+    &:nth-child(5) {
+      animation-delay: 20s;
+    }
+  }
+
+  @keyframes heroimage {
+    10% {
+      opacity: 1;
+    }
+
+    20% {
+      opacity: 1;
+    }
+
+    30% {
+      opacity: 0;
+    }
+
+    40% {
+      transform: scale(1);
+    }
+  }
+</style>
+
+<script></script>
