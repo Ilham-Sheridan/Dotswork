@@ -8,7 +8,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
     site: 'https://ilham-sheridan.github.io/Dotswork/',
 
-    //base: '/Dotswork/', //repo name
+    base: '/Dotswork/', //repo name
     //does fucking nothing.
     markdown: {
         syntaxHighlight: "shiki",
