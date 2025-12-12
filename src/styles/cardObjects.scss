@@ -225,6 +225,7 @@
 
 .verticalAligment {
     display: flex;
+    justify-content: center;
 
     &.alignTop {
         align-items: flex-start;

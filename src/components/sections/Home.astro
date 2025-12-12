@@ -23,9 +23,8 @@ function getImagePath(path: string): string {
   <Gridbox id="about">
     <CardObject
       image={{
-        src: getImagePath("/content/illus/just.jpg"),
-        alt: "Mary on top of a rooftop",
-        positionX: "60%",
+        src: getImagePath("/content/3d/nnSpindle.jpg"),
+        alt: "?",
       }}
       size="extraTall"
     />
@@ -65,7 +64,7 @@ function getImagePath(path: string): string {
       isTextCard
       size="mediumWide"
       contentSize="regRead"
-      content=`<p style="font-size:2rem">My work online alias goes by <span class='b7'>Dotswork</span>, otherwise you could simply call me <span class='b7'>Ilham</span>.</p>`
+      content=`<p style="font-size:2rem">My work online alias goes by <span class='b7'>Dotswork</span>,</p><p style="font-size:1.5rem">otherwise you could simply call me <span class='b7'>Ilham</span>.</p>`
       alignText="center"
       alignTextVert="center"
     />
@@ -74,7 +73,6 @@ function getImagePath(path: string): string {
       image={{
         src: getImagePath("/content/dotswork.png"),
         alt: "Dotswork Logo",
-        position: "left",
       }}
     />
 
@@ -87,11 +85,11 @@ function getImagePath(path: string): string {
     />
     <CardObject
       image={{
-        src: getImagePath("/content/illus/grow.jpg"),
-        alt: "Mareota with cocoa",
-        position: "right",
+        src: getImagePath("/content/3d/ng3.jpg"),
+        alt: "?",
+        positionY: "45%",
       }}
-      size="wide"
+      size="mediumWide"
     />
   </Gridbox>
 
@@ -154,10 +152,10 @@ function getImagePath(path: string): string {
       }}
     />
     <MediaCard
-      size="extraTall"
+      size="tall"
       image={{
-        src: getImagePath("/content/3d/nnSpindle.jpg"),
-        alt: "'QUBLAST' Inspired by the hacking tool alike 'FLipper Zero' combined with a mini oscilloscope multimeter/multitool.",
+        src: getImagePath("/content/3d/ng1.jpg"),
+        alt: "Previous work at Dampu Design: Nestle Goodnes product showcase render",
       }}
     />
     <MediaCard
@@ -170,6 +168,12 @@ function getImagePath(path: string): string {
     />
     <MediaCard
       size="tall"
+      video={{
+        src: getImagePath("/content/3d/goodnes_final.webm"),
+        alt: "Product showcase animation for Nestle Goodnes at Dampu Design.",
+      }}
+    />
+    <MediaCard
       video={{
         src: getImagePath("/content/3d/neonix.webm"),
         alt: "'Neo-Classic' Design numerical nixie tube with functional controller.",
@@ -229,13 +233,13 @@ function getImagePath(path: string): string {
         volume: 0.5,
       }}
     />
-    <MediaCard
+    <!-- <MediaCard
       video={{
         src: getImagePath("/content/modesig/hoovesies.webm"),
         alt: `"Hoovesies" by VyletPony, Unconventional music visualizer using a visual break down of the music composition`,
         volume: 0.5,
       }}
-    />
+    /> -->
     <MediaCard
       video={{
         src: getImagePath("/content/modesig/c.webm"),
@@ -244,7 +248,14 @@ function getImagePath(path: string): string {
       }}
     />
     <MediaCard
-      size="mediumWide"
+      video={{
+        src: getImagePath("/content/modesig/retroux.webm"),
+        alt: `Authentic mockup of old-school retro-futuristic game settings UIX`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+      size="big"
       video={{
         src: getImagePath("/content/modesig/imightbeabeliever.webm"),
         alt: `"I Might Be a Believer" by Paper Idol, Typography music video using mixed media of both 2D and 3D elements`,
@@ -252,7 +263,7 @@ function getImagePath(path: string): string {
       }}
     />
     <MediaCard
-      size="big"
+      size="mediumWide"
       video={{
         src: getImagePath("/content/modesig/debug_demo.webm"),
         alt: `A believably animated debug/diagnostic screen of the NeoNix nixie tube clock project`,
@@ -260,16 +271,26 @@ function getImagePath(path: string): string {
       }}
     />
     <MediaCard
+    size="mediumWide"
       video={{
-        src: getImagePath("/content/modesig/retroux.webm"),
-        alt: `It looks horrid in quality (And small!), but not by accident. It is infact to emulate the old school screen capture of a Nintendo DS back in the days of YouTube. The 'UX' itself in the background isn't from any real game. It simply is a mockup of a UX/UI for an NDS game I completely made up.`,
+        src: getImagePath("/content/modesig/jh.webm"),
+        alt: `One day I woke up and decided to make one of my good friends an animated logo out of nowhere.`,
         volume: 0.5,
       }}
     />
     <MediaCard
+    size="mediumWide"
       video={{
-        src: getImagePath("/content/modesig/jh.webm"),
-        alt: `One day I woke up and decided to make one of my good friends an animated logo out of nowhere.`,
+        src: getImagePath("/content/modesig/yag_bumper.webm"),
+        alt: `Professional college project "YAG Autotechnik" bumper video.`,
+        volume: 0.5,
+      }}
+    />
+    <MediaCard
+    size="mediumWide"
+      video={{
+        src: getImagePath("/content/modesig/MODEL.webm"),
+        alt: `A video fitted with animated bumpers for compiling various 3D models for a ceremonial showcase.`,
         volume: 0.5,
       }}
     />
